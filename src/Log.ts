@@ -96,7 +96,10 @@ export class Log {
 
     private static level = LogLevel.INFO;
 
-    private static defaults: LogConfigArg = {};
+    private static defaults: LogConfigArg = {
+        context: 'Global',
+        color: true,
+    };
 
     private logCallback: logCallback_t;
 
@@ -104,7 +107,9 @@ export class Log {
         context?: string;
         color: Boolean;
     } = {
-            color: false
+            context: Log.defaults.context,
+            color: Log.defaults.color,
+
         };
 
     constructor(arg?: string);

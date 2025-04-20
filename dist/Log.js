@@ -79,10 +79,14 @@ export class Log {
     static asyncLocalStorage = new AsyncLocalStorage();
     static globalLog = new Log();
     static level = LogLevel.INFO;
-    static defaults = {};
+    static defaults = {
+        context: 'Global',
+        color: true,
+    };
     logCallback;
     config = {
-        color: false
+        context: Log.defaults.context,
+        color: Log.defaults.color,
     };
     constructor(arg) {
         if (typeof arg === 'string') {
