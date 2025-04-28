@@ -82,7 +82,10 @@ export type LogConfigArg = {
     color?: Boolean;
 };
 
-type logCallback_t = (message: string) => void
+type logCallback_t = (
+    message: string, // The logged message
+    level: LogLevel // The log level of the message
+) => void
 
 /**
  * Logger class.
@@ -101,7 +104,8 @@ export class Log {
         color: true,
     };
 
-    private logCallback: logCallback_t;
+    private logCallback: logCallback_t; // Callback for this logger
+    private static globalLogCallback: logCallback_t; // Callback that is called for all logs (instances and global)
 
     private config: {
         context?: string;
@@ -176,8 +180,14 @@ export class Log {
 
         console.log(`${this.config.color ? logLevelColor(level) : ''}${logMessage}`);
 
+        // Call the callback if it is set
         if (this.logCallback) {
-            this.logCallback(logMessage);
+            this.logCallback(logMessage, level);
+        }
+
+        // Call the global log callback if it is set
+        if (Log.globalLogCallback) {
+            Log.globalLogCallback(logMessage, level);
         }
     }
 
@@ -376,5 +386,13 @@ export class Log {
      */
     static setlogCallback(cb: logCallback_t) {
         this.globalLog.setLogCallback(cb);
+    }
+
+    /**
+     * Sets the callback for all logs (instances and global). All messages will be logged and also be send as a string to the callback
+     * @param cb The callback that is called for all logs (instances and global)
+     */
+    static setGlobalLogCallback(cb: logCallback_t) {
+        Log.globalLogCallback = cb;
     }
 }

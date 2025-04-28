@@ -17,7 +17,8 @@ export type LogConfigArg = {
     context?: string;
     color?: Boolean;
 };
-type logCallback_t = (message: string) => void;
+type logCallback_t = (message: string, // The logged message
+level: LogLevel) => void;
 /**
  * Logger class.
  * Logs can be sent to a Global log (static functions) or to a specific instance of a log.
@@ -29,6 +30,7 @@ export declare class Log {
     private static level;
     private static defaults;
     private logCallback;
+    private static globalLogCallback;
     private config;
     constructor(arg?: string);
     constructor(arg?: LogConfigArg);
@@ -180,5 +182,10 @@ export declare class Log {
      * @param cb The callback to set
      */
     static setlogCallback(cb: logCallback_t): void;
+    /**
+     * Sets the callback for all logs (instances and global). All messages will be logged and also be send as a string to the callback
+     * @param cb The callback that is called for all logs (instances and global)
+     */
+    static setGlobalLogCallback(cb: logCallback_t): void;
 }
 export {};
