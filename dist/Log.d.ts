@@ -18,9 +18,11 @@ export type LogConfigArg = {
     color?: Boolean;
 };
 type logCallback_t = (message: string, // The logged message
+timestamp: Date, // The timestamp of the log
 rawMessage: string, // The raw message (without formatting)
 level: LogLevel, // The log level of the message
 context?: string, // The context of the logger
+store?: string, // The store of the async local storage
 args?: unknown[]) => void;
 /**
  * Logger class.

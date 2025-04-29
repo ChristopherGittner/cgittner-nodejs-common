@@ -137,19 +137,20 @@ export class Log {
     log(message = '', level = LogLevel.INFO, ...args) {
         if (level < Log.level)
             return;
-        const store = Log.asyncLocalStorage.getStore();
+        const timestamp = new Date();
+        const store = Log.asyncLocalStorage.getStore().toString();
         if (args.length > 0) {
             message = format(message, ...args);
         }
-        const logMessage = `${new Date().toISOString()} [${logLevelToString(level)}]${store ? ` <${store}>` : ''}${this.config.context ? ` <${this.config.context}>` : ''} ${message}`;
+        const logMessage = `${timestamp.toISOString()} [${logLevelToString(level)}]${store ? ` <${store}>` : ''}${this.config.context ? ` <${this.config.context}>` : ''} ${message}`;
         console.log(`${this.config.color ? logLevelColor(level) : ''}${logMessage}`);
         // Call the callback if it is set
         if (this.logCallback) {
-            this.logCallback(logMessage, message, level, this.config.context, args);
+            this.logCallback(logMessage, timestamp, message, level, this.config.context, store, args);
         }
         // Call the global log callback if it is set
         if (Log.globalLogCallback) {
-            Log.globalLogCallback(logMessage, message, level, this.config.context, args);
+            Log.globalLogCallback(logMessage, timestamp, message, level, this.config.context, store, args);
         }
     }
     /**
