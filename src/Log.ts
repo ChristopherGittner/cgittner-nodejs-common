@@ -87,6 +87,12 @@ type logCallback_t = (
     level: LogLevel // The log level of the message
 ) => void
 
+const DEFAULTS: LogConfigArg = {
+    context: 'Global',
+    color: true,
+};
+
+
 /**
  * Logger class.
  * Logs can be sent to a Global log (static functions) or to a specific instance of a log.
@@ -99,11 +105,6 @@ export class Log {
 
     private static level = LogLevel.INFO;
 
-    private static defaults: LogConfigArg = {
-        context: 'Global',
-        color: true,
-    };
-
     private logCallback: logCallback_t; // Callback for this logger
     private static globalLogCallback: logCallback_t; // Callback that is called for all logs (instances and global)
 
@@ -111,8 +112,8 @@ export class Log {
         context?: string;
         color: Boolean;
     } = {
-            context: Log.defaults.context,
-            color: Log.defaults.color,
+            context: DEFAULTS.context,
+            color: DEFAULTS.color,
 
         };
 
@@ -122,12 +123,12 @@ export class Log {
         if (typeof arg === 'string') {
             this.setConfig({
                 context: arg,
-                color: Log.defaults.color,
+                color: DEFAULTS.color,
             });
         } else if (arg) {
             this.setConfig({
-                context: arg.context || Log.defaults.context,
-                color: arg.color || Log.defaults.color,
+                context: arg.context || DEFAULTS.context,
+                color: arg.color || DEFAULTS.color,
             });
         }
     }
@@ -138,10 +139,10 @@ export class Log {
      */
     static setDefaults(defaults: LogConfigArg) {
         if (defaults.context !== undefined)
-            Log.defaults.context = defaults.context;
+            DEFAULTS.context = defaults.context;
 
         if (defaults.color !== undefined)
-            Log.defaults.color = defaults.color;
+            DEFAULTS.color = defaults.color;
     }
 
     /**

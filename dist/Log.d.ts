@@ -28,7 +28,6 @@ export declare class Log {
     private static asyncLocalStorage;
     private static globalLog;
     private static level;
-    private static defaults;
     private logCallback;
     private static globalLogCallback;
     private config;

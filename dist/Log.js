@@ -70,6 +70,10 @@ function logLevelColor(level) {
             return '\x1b[4m\x1b[31m'; // Red underline
     }
 }
+const DEFAULTS = {
+    context: 'Global',
+    color: true,
+};
 /**
  * Logger class.
  * Logs can be sent to a Global log (static functions) or to a specific instance of a log.
@@ -79,27 +83,23 @@ export class Log {
     static asyncLocalStorage = new AsyncLocalStorage();
     static globalLog = new Log();
     static level = LogLevel.INFO;
-    static defaults = {
-        context: 'Global',
-        color: true,
-    };
     logCallback; // Callback for this logger
     static globalLogCallback; // Callback that is called for all logs (instances and global)
     config = {
-        context: Log.defaults.context,
-        color: Log.defaults.color,
+        context: DEFAULTS.context,
+        color: DEFAULTS.color,
     };
     constructor(arg) {
         if (typeof arg === 'string') {
             this.setConfig({
                 context: arg,
-                color: Log.defaults.color,
+                color: DEFAULTS.color,
             });
         }
         else if (arg) {
             this.setConfig({
-                context: arg.context || Log.defaults.context,
-                color: arg.color || Log.defaults.color,
+                context: arg.context || DEFAULTS.context,
+                color: arg.color || DEFAULTS.color,
             });
         }
     }
@@ -109,9 +109,9 @@ export class Log {
      */
     static setDefaults(defaults) {
         if (defaults.context !== undefined)
-            Log.defaults.context = defaults.context;
+            DEFAULTS.context = defaults.context;
         if (defaults.color !== undefined)
-            Log.defaults.color = defaults.color;
+            DEFAULTS.color = defaults.color;
     }
     /**
      * Sets the configuration of this Logger
