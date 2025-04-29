@@ -18,7 +18,10 @@ export type LogConfigArg = {
     color?: Boolean;
 };
 type logCallback_t = (message: string, // The logged message
-level: LogLevel) => void;
+rawMessage: string, // The raw message (without formatting)
+level: LogLevel, // The log level of the message
+context?: string, // The context of the logger
+args?: unknown[]) => void;
 /**
  * Logger class.
  * Logs can be sent to a Global log (static functions) or to a specific instance of a log.

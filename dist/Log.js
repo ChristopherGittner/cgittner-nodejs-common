@@ -145,11 +145,11 @@ export class Log {
         console.log(`${this.config.color ? logLevelColor(level) : ''}${logMessage}`);
         // Call the callback if it is set
         if (this.logCallback) {
-            this.logCallback(logMessage, level);
+            this.logCallback(logMessage, message, level, this.config.context, args);
         }
         // Call the global log callback if it is set
         if (Log.globalLogCallback) {
-            Log.globalLogCallback(logMessage, level);
+            Log.globalLogCallback(logMessage, message, level, this.config.context, args);
         }
     }
     /**

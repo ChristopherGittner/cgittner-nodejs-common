@@ -84,7 +84,10 @@ export type LogConfigArg = {
 
 type logCallback_t = (
     message: string, // The logged message
-    level: LogLevel // The log level of the message
+    rawMessage: string, // The raw message (without formatting)
+    level: LogLevel, // The log level of the message
+    context?: string, // The context of the logger
+    args?: unknown[] // The arguments passed to the log function
 ) => void
 
 const DEFAULTS: LogConfigArg = {
@@ -183,12 +186,12 @@ export class Log {
 
         // Call the callback if it is set
         if (this.logCallback) {
-            this.logCallback(logMessage, level);
+            this.logCallback(logMessage, message, level, this.config.context, args);
         }
 
         // Call the global log callback if it is set
         if (Log.globalLogCallback) {
-            Log.globalLogCallback(logMessage, level);
+            Log.globalLogCallback(logMessage, message, level, this.config.context, args);
         }
     }
 
