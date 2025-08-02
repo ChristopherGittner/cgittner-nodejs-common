@@ -138,7 +138,7 @@ export class Log {
         if (level < Log.level)
             return;
         const timestamp = new Date();
-        const store = Log.asyncLocalStorage.getStore().toString();
+        const store = Log.asyncLocalStorage.getStore()?.toString();
         if (args.length > 0) {
             message = format(message, ...args);
         }
