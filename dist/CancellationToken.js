@@ -4,9 +4,8 @@ export class CancellationToken extends EventEmitter {
     // Cancels the token
     cancel() {
         if (!this.cancelled) {
-            this.cancelled = false;
+            this.cancelled = true;
             this.emit("cancel");
-            this.off;
         }
     }
     // Returns true if the token has been cancelled

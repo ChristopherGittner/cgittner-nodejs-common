@@ -25,7 +25,7 @@ export class Deferred {
             }
             if (params.ct) {
                 this.ct = params.ct;
-                this.ct.once("cancel", this.cancelFunc.bind(this));
+                this.ct.once("cancel", this.cancelFunc);
             }
         }
     }

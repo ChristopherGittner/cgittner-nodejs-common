@@ -155,9 +155,12 @@ export class Log {
      * @param config The configuration to set
      */
     setConfig(config: LogConfigArg) {
-        this.config.context = config.context;
-        if (config.color !== undefined)
+        if (Object.hasOwn(config, "context")) {
+            this.config.context = config.context;
+        }
+        if (Object.hasOwn(config, "color")) {
             this.config.color = config.color;
+        }
     }
 
     /**
@@ -185,7 +188,7 @@ export class Log {
         }
         const logMessage = `${timestamp.toISOString()} [${logLevelToString(level)}]${store ? ` <${store}>` : ''}${this.config.context ? ` <${this.config.context}>` : ''} ${message}`;
 
-        console.log(`${this.config.color ? logLevelColor(level) : ''}${logMessage}`);
+        console.log(`${this.config.color ? logLevelColor(level) : ''}${logMessage}${this.config.color ? '\x1b[0m' : ''}`);
 
         // Call the callback if it is set
         if (this.logCallback) {

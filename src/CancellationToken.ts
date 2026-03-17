@@ -1,5 +1,4 @@
 import { EventEmitter } from "events";
-import { off } from "process";
 
 /**
  * A CancellationToken can be used to cancel asynchronous operations.
@@ -19,9 +18,8 @@ export class CancellationToken extends EventEmitter {
     // Cancels the token
     cancel() {
         if (!this.cancelled) {
-            this.cancelled = false;
+            this.cancelled = true;
             this.emit("cancel");
-            this.off
         }
     }
 
