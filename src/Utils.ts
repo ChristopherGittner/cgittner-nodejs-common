@@ -1,7 +1,7 @@
 import { EventEmitter } from "events";
 import { CancellationToken } from "./CancellationToken.js";
 import { CancelledError } from "./CancelledError.js";
-import { fromError } from "zod-validation-error";
+import z, { ZodError } from "zod";
 
 /**
  * Returns a Promise that will be resolved after a certain amount of time. Can be used to asynchronously wait for a certain amount of time.
@@ -131,7 +131,7 @@ export function round(value: number, decimals: number) {
  */
 export function getErrorMessage(error: unknown) {
     if (error && error.constructor.name === "ZodError" && (error as any).name === "ZodError") {
-        return fromError(error).message;
+        return z.prettifyError(error as ZodError);
     }
     else if (error instanceof Error) return error.message;
     else if (typeof ((error as any).message) === "string") return (error as any).message;

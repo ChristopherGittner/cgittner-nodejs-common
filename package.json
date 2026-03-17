@@ -7,13 +7,13 @@
   "types": "dist/index.d.ts",
   "license": "ISC",
   "author": "Christopher Gittner",
-  "dependencies": {
-    "zod-validation-error": "^5.0.0"
-  },
   "devDependencies": {
     "@types/node": "^20.19.37"
   },
   "scripts": {
     "build": "tsc --build --clean && tsc --build"
+  },
+  "dependencies": {
+    "zod": "^4.3.6"
   }
 }

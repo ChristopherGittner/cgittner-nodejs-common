@@ -1,5 +1,5 @@
 import { CancelledError } from "./CancelledError.js";
-import { fromError } from "zod-validation-error";
+import z from "zod";
 /**
  * Returns a Promise that will be resolved after a certain amount of time. Can be used to asynchronously wait for a certain amount of time.
  * @param millis Number of milliseconds to sleep
@@ -118,7 +118,7 @@ export function round(value, decimals) {
  */
 export function getErrorMessage(error) {
     if (error && error.constructor.name === "ZodError" && error.name === "ZodError") {
-        return fromError(error).message;
+        return z.prettifyError(error);
     }
     else if (error instanceof Error)
         return error.message;
