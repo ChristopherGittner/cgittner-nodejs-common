@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 import { EventEmitter } from "events";
 /**
  * A CancellationToken can be used to cancel asynchronous operations.

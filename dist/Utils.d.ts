@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 import { EventEmitter } from "events";
 import { CancellationToken } from "./CancellationToken.js";
 /**
