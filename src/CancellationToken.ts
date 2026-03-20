@@ -13,7 +13,7 @@ export declare interface CancellationToken {
 }
 
 export class CancellationToken extends EventEmitter {
-    cancelled = false;
+    private cancelled = false;
 
     // Cancels the token
     cancel() {

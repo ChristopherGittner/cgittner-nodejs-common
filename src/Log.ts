@@ -79,7 +79,7 @@ export type LogConfigArg = {
     context?: string;
 
     // Whether to color the output
-    color?: Boolean;
+    color?: boolean;
 };
 
 type logCallback_t = (
@@ -110,12 +110,12 @@ export class Log {
 
     private static level = LogLevel.INFO;
 
-    private logCallback: logCallback_t; // Callback for this logger
-    private static globalLogCallback: logCallback_t; // Callback that is called for all logs (instances and global)
+    private logCallback?: logCallback_t; // Callback for this logger
+    private static globalLogCallback?: logCallback_t; // Callback that is called for all logs (instances and global)
 
     private config: {
         context?: string;
-        color: Boolean;
+        color: boolean;
     } = {
             context: DEFAULTS.context,
             color: DEFAULTS.color,
@@ -256,26 +256,6 @@ export class Log {
     }
 
     /**
-     * Set the Log Level for all Logs (Global and all instances)
-     * @param level The log level to set
-     */
-    setLevel(level: LogLevel | 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal') {
-        if (typeof level === 'string') {
-            Log.level = logLevelFromString(level);
-        } else {
-            Log.level = level;
-        }
-    }
-
-    /**
-     * Get the current log level
-     * @returns The current log level
-     */
-    getLevel() {
-        return Log.level;
-    }
-
-    /**
      * Get the context of this Logger
      * @returns The context of this Logger
      */
@@ -394,7 +374,7 @@ export class Log {
      * Sets the callback for the global log. All messages will be logged and also be send as a string to the callback
      * @param cb The callback to set
      */
-    static setlogCallback(cb: logCallback_t) {
+    static setLogCallback(cb: logCallback_t) {
         this.globalLog.setLogCallback(cb);
     }
 

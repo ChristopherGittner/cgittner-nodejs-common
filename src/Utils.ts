@@ -45,7 +45,7 @@ export function sleepCt(millis: number, ct: CancellationToken) {
  * @returns The Byte hex representation of the data
  */
 export function hexEncode(data: string) {
-    return data.split("").map((c) => c.charCodeAt(0).toString(16).padStart(2, "0")).join(" ");
+    return Buffer.from(data, "utf8").toString("hex").match(/.{2}/g)!.join(" ");
 }
 
 /**
@@ -130,7 +130,7 @@ export function round(value: number, decimals: number) {
  * @returns A String with the error message
  */
 export function getErrorMessage(error: unknown) {
-    if (error && error.constructor.name === "ZodError" && (error as any).name === "ZodError") {
+    if (error instanceof ZodError) {
         return z.prettifyError(error as ZodError);
     }
     else if (error instanceof Error) return error.message;
