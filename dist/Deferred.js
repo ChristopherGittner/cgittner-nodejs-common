@@ -1,3 +1,4 @@
+import { CancelledError } from "./CancelledError.js";
 /**
  * A Deferred is a Promise that can be resolved or rejected at a later time.
  * It can optionally be cancelled by a CancellationToken.
@@ -57,7 +58,7 @@ export class Deferred {
         return this.promise;
     }
     cancelFunc = () => {
-        this.reject(new Error("Cancelled"));
+        this.reject(new CancelledError());
     };
     cleanup() {
         if (this.timeout) {

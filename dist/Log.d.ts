@@ -15,7 +15,7 @@ export declare enum LogLevel {
 export declare function logLevelFromString(s: string): LogLevel;
 export type LogConfigArg = {
     context?: string;
-    color?: Boolean;
+    color?: boolean;
 };
 type logCallback_t = (message: string, // The logged message
 timestamp: Date, // The timestamp of the log
@@ -33,8 +33,8 @@ export declare class Log {
     private static asyncLocalStorage;
     private static globalLog;
     private static level;
-    private logCallback;
-    private static globalLogCallback;
+    private logCallback?;
+    private static globalLogCallback?;
     private config;
     constructor(arg?: string);
     constructor(arg?: LogConfigArg);
@@ -109,7 +109,7 @@ export declare class Log {
      * Get the context of this Logger
      * @returns The context of this Logger
      */
-    getContext(): string;
+    getContext(): string | undefined;
     /**
      * Runs a callback and sets the context for it
      * @param context The context to set
@@ -185,7 +185,7 @@ export declare class Log {
      * Sets the callback for the global log. All messages will be logged and also be send as a string to the callback
      * @param cb The callback to set
      */
-    static setlogCallback(cb: logCallback_t): void;
+    static setLogCallback(cb: logCallback_t): void;
     /**
      * Sets the callback for all logs (instances and global). All messages will be logged and also be send as a string to the callback
      * @param cb The callback that is called for all logs (instances and global)

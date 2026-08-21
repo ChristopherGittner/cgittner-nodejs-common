@@ -1,5 +1,5 @@
 import { CancelledError } from "./CancelledError.js";
-import z from "zod";
+import z, { ZodError } from "zod";
 /**
  * Returns a Promise that will be resolved after a certain amount of time. Can be used to asynchronously wait for a certain amount of time.
  * @param millis Number of milliseconds to sleep
@@ -38,7 +38,7 @@ export function sleepCt(millis, ct) {
  * @returns The Byte hex representation of the data
  */
 export function hexEncode(data) {
-    return data.split("").map((c) => c.charCodeAt(0).toString(16).padStart(2, "0")).join(" ");
+    return Buffer.from(data, "utf8").toString("hex").match(/.{2}/g).join(" ");
 }
 /**
  * Creates a Promise that will be resolved when a certain event is emitted
@@ -117,7 +117,7 @@ export function round(value, decimals) {
  * @returns A String with the error message
  */
 export function getErrorMessage(error) {
-    if (error && error.constructor.name === "ZodError" && error.name === "ZodError") {
+    if (error instanceof ZodError) {
         return z.prettifyError(error);
     }
     else if (error instanceof Error)

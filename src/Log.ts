@@ -57,6 +57,35 @@ export function logLevelFromString(s: string): LogLevel {
     }
 }
 
+/**
+ * Returns the syslog priority (0-7) for a LogLevel, used to prefix log lines
+ * with "<N>" so systemd's journald (with SyslogLevelPrefix enabled, the default)
+ * maps the line to the correct PRIORITY instead of defaulting to "info".
+ * @param level The LogLevel to convert to a syslog priority
+ * @returns The syslog priority for the LogLevel
+ */
+function logLevelToSyslogPriority(level: LogLevel) {
+    switch (level) {
+        case LogLevel.TRACE:
+            return 7;
+        case LogLevel.DEBUG:
+            return 7;
+        case LogLevel.INFO:
+            return 6;
+        case LogLevel.WARN:
+            return 4;
+        case LogLevel.ERROR:
+            return 3;
+        case LogLevel.FATAL:
+            return 2;
+    }
+}
+
+// Whether stdout/stderr are connected directly to the systemd journal.
+// Set by systemd itself; used to only emit "<N>" syslog priority prefixes
+// when journald will actually consume and strip them.
+const IS_JOURNALD = !!process.env.JOURNAL_STREAM;
+
 function logLevelColor(level: LogLevel) {
     switch (level) {
         case LogLevel.TRACE:
@@ -92,7 +121,7 @@ type logCallback_t = (
     args?: unknown[] // The arguments passed to the log function
 ) => void
 
-const DEFAULTS: LogConfigArg = {
+const DEFAULTS: Required<LogConfigArg> = {
     context: 'Global',
     color: true,
 };
@@ -159,7 +188,7 @@ export class Log {
             this.config.context = config.context;
         }
         if (Object.hasOwn(config, "color")) {
-            this.config.color = config.color;
+            this.config.color = config.color ?? this.config.color;
         }
     }
 
@@ -188,7 +217,7 @@ export class Log {
         }
         const logMessage = `${timestamp.toISOString()} [${logLevelToString(level)}]${store ? ` <${store}>` : ''}${this.config.context ? ` <${this.config.context}>` : ''} ${message}`;
 
-        console.log(`${this.config.color ? logLevelColor(level) : ''}${logMessage}${this.config.color ? '\x1b[0m' : ''}`);
+        console.log(`${IS_JOURNALD ? `<${logLevelToSyslogPriority(level)}>` : ''}${this.config.color ? logLevelColor(level) : ''}${logMessage}${this.config.color ? '\x1b[0m' : ''}`);
 
         // Call the callback if it is set
         if (this.logCallback) {
@@ -253,6 +282,26 @@ export class Log {
      */
     fatal(message = '', ...args: any) {
         this.log(message, LogLevel.FATAL, ...args);
+    }
+
+    /**
+     * Set the Log Level for all Logs (Global and all instances)
+     * @param level The log level to set
+     */
+    setLevel(level: LogLevel | 'trace' | 'debug' | 'info' | 'warn' | 'error' | 'fatal') {
+        if (typeof level === 'string') {
+            Log.level = logLevelFromString(level);
+        } else {
+            Log.level = level;
+        }
+    }
+
+    /**
+     * Get the current log level
+     * @returns The current log level
+     */
+    getLevel() {
+        return Log.level;
     }
 
     /**

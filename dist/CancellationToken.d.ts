@@ -1,4 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
 import { EventEmitter } from "events";
 /**
  * A CancellationToken can be used to cancel asynchronous operations.
@@ -12,7 +11,7 @@ export declare interface CancellationToken {
     off(event: "cancel", listener: () => void): this;
 }
 export declare class CancellationToken extends EventEmitter {
-    cancelled: boolean;
+    private cancelled;
     cancel(): void;
     isCancelled(): boolean;
 }
