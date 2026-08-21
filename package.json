@@ -1,6 +1,6 @@
 {
   "name": "cgittner-nodejs-common",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Common utilities for Node.js applications",
   "main": "dist/index.js",
   "type": "module",
